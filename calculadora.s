@@ -40,7 +40,8 @@
         syscall
 
         move $s1, $v0
-        
+
+        # verificação de opcao selecionada no menu
         addi $s2, 5
         beq $s1, $s2, end
         
