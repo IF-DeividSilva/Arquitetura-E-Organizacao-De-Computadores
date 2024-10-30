@@ -1,0 +1,157 @@
+1) Codifique o programa a seguir em assempbly do mips e logo depois em código binário. Para cada instrução, considere os formatos de instruções do mips.
+
+Dica: Utilize a tabela de registradores apresentado em aula, e o mapa de bits disponibilizado, para realizar essa tradução.
+
+ Considerando o código a seguir:
+
+int folha(int g, int h, int i, int j){
+
+         int f;
+
+         f = (g + h) - (i + j);
+
+         return f;
+
+}
+
+Agora responda as perguntas:
+
+a) Considerando o conjunto de registradores apresentados em aula, quais registradores você utilizou
+para armazenar os argumentos da função? Por que?
+
+R: Os registradores a, pois por convenção eles são reservados para o armazenamento de argumentos da fumcao
+
+b) Faça as chamadas de sistema para imprimir o valor de f, e para sair do programa;
+
+R: 
+ main:
+        # adiciona os argumentos da funcao nos registradores de argumentos ($a)
+        li $a0,1
+        li $a1,2
+        li $a2,3
+        li $a3,4
+        
+        # Program Counter (pc) controla o fluxo das instruçoes do programa
+        # aponta para proxima instrucao a ser executada
+        # jal guarda no $ra o endereco da prox instrucao (PC+4)
+        
+        jal folha
+        
+
+        move $a0, $v0
+
+        li $v0, 1
+        syscall
+
+        li $v0, 10
+        syscall
+        
+        
+
+    folha:
+        add $t0, $a0, $a1
+        add $t1, $a2, $a3
+        sub $t3, $t0, $t1
+
+        move $v0, $t3  # returm
+        
+        # salta para um endereco armazenado dentro de um registrador
+        jr $ra
+
+
+
+
+c) Qual registrador você acha mais adequado para armazenar o valor de retorno da função folha?
+
+R: O v0, pois é o registrador que por convencao eh usado para avaliacao de expressao e resultados de uma funcao
+
+d) Teste o código utilizando algum simulador do MIPS.
+
+R: DONE
+
+2) implemente o código correspondente em mips
+
+int vetor[] = {3, 0, 1, 2, -6, -2, 4, 10, 3, 7, 8, -9, -15, -20, -87, -100}
+
+printf("Seja bem vindo! \nPor favor entre com um valor inteiro para pesquisar no vetor\n\n");
+scanf("%i", elemento);
+
+while(vetor[i] != -100){
+
+    if(vetor[i] == elemento){
+        printf("Elemento %i encontrado\n\n", elemento );
+        exit(0);
+    }
+
+    i++;
+}
+
+printf("Elemento não encontrado\n\n");
+exit(0);
+
+
+#int vetor[] = {3, 0, 1, 2, -6, -2, 4, 10, 3, 7, 8, -9, -15, -20, -87, -100}
+#
+#printf("Seja bem vindo! \nPor favor entre com um valor inteiro para pesquisar no vetor\n\n");
+#scanf("%i", elemento);
+#
+#while(vetor[i] != -100){
+#
+#    if(vetor[i] == elemento){
+#        printf("Elemento %i encontrado\n\n", elemento );
+#        exit(0);
+#    }
+#
+#    i++;
+#}
+#
+#printf("Elemento não encontrado\n\n");
+#exit(0);
+
+
+.data 
+
+vetor: .word 3 0 1 2 -6 -2 4 10 3 7 8 -9 -15 -20 -87 -100 # cria vetor
+mensagem1: .asciiz " Seja bem vindo! \nPor favor entre com um valor inteiro para pesquisar no vetor\n\n"
+mensagem2: .asciiz "Elemento nao encontrado\n"
+
+.text
+    main:
+        li $s1, 0  # i=0
+        li $s2, -100
+        la $s3, vetor # recebe o endereco do primeiro elem do vetor
+
+        # para mostrar string na tela mensagem2
+        li $v0, 4
+        la $a0, mensagem1
+        syscall
+        
+        # pega o num
+        li $v0, 5
+        syscall
+
+        move $t2, $v0
+
+    while:
+        add $t2, $t1, $s3    # salva o endereco em outro reg para não perder o inicial que fica em $s3
+        lw $t0, 0($t2)       # salva em $t0 o elemento do vetor
+        bne $t0, $t2, true   # caso o valor digitado seja igual a algum valor do vetor pula pra true
+        bne $t0, $s2, sair   # compara se o valor do elemento é igual ao volor de k
+        addi $s1, $s1, 1     # i++
+        addi $t1, $t1, 4     # soma 4 para ir para o prox endereco
+        j while
+
+    true:
+        li $v0, 1            # printar o valor 
+        move $a0, $s1
+        syscall
+    
+    sair:
+        # para mostrar string na tela mensagem2
+        li $v0, 4
+        la $a0, mensagem2
+        syscall
+
+        li $v0, 10
+        syscall
+
