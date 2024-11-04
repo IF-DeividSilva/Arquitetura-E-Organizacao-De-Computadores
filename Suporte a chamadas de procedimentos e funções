@@ -1,0 +1,10 @@
+Para transferir o controle do processedimento é usado o "jal" -> jump and link, pois ele transfere o controle e salva o endereço da proxima instrução.
+
+- Recursão não é interessante no ponto de vista de desempenho, pois ela vai empilhando tudo até atingir o caso base gerando um alto gasto de memoria.
+- É mais interressante do ponto de vista de desempenho dividir uma função em 2 com menos argumentos do que uma com mais e ter que empilhar os que sobraram na pilha.
+
+- O $sp aponta para o topo da pilha, para salvar os regs na pilha é necessario "alocar memoria" na pilha (lembrando que cada reg é 4 bites), a pilha cresce para baixo entao para alocar deve-se fazer: 
+	-(n de registradores * 4)    -> "-" pois cresce para baixo
+
+/ Em string é usado lb para ler e sb para escrever na mem
+  
