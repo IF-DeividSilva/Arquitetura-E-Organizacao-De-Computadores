@@ -1,0 +1,11 @@
+
+Nos endereços de memoria é necessario usar o pc para poder acessar todas as celulas de memorias, 
+pois o campo de endereço não possui bits suficientes para o acesso de todas
+
+-> Compilador gera o codigo em assemble.
+-> Montador gera o arquivo objeto.
+-> O linker é responsavel por "juntar" os codigos objetos geradas em um executavel calculando os endereços corretos das instruções (endereços absolutos). 
+-> Loader carrega para a memoria a partir do codigo objeto.
+
+-> Código objeto tem os endereços das labels zeradas.
+
