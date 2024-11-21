@@ -56,7 +56,7 @@ mensagem3: .asciiz "A area do triangulo eh: "
 
         jal DivPorDois
 
-        lw $ra 8($sp)
+        lw $ra, 8($sp)
         lw $s0, 4($sp)
 
         #desalocar mem

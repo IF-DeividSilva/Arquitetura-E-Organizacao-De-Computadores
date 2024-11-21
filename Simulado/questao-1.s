@@ -20,30 +20,27 @@
         # armazena o valor lido
         move $t1, $v0
 
-        # comparação 
-        slt $t2, $t0, $t1
-        addi $t3, $t3, 1
-        beq $t0, $t1, iguais
-        beq $t2, $t3, resultado
+        # comparação
+        beq $t0, $t1, iguais  # se $t0 == $t1, vá para iguais
+        bgt $t0, $t1, maior_t0  # se $t0 > $t1, vá para maior_t0
 
+        # se $t1 for maior
         li $v0, 1
-        move $a0, $t0
+        move $a0, $t1
         syscall
-
         j exit
 
     iguais:
-        li $v0, 10
+        li $v0, 1
         move $a0, $zero
         syscall
 
         j exit
 
-    resultado:
+     maior_t0:
         li $v0, 1
-        move $a0, $t1
+        move $a0, $t0
         syscall
-
         j exit
     
     exit:
