@@ -50,5 +50,5 @@
 
         jr $ra 
 
-# na cisc como tem mais instruções, mas o hardware eh mais complexo. 
-# risc eh mais complexo por ter menos instrucoes. 
+# na cisc como tem mais instruções, mas o hardware eh mais complexo, e o codigo eh mais simples. 
+# risc eh mais complexo por ter menos instrucoes, e o hardware eh mais simples. 

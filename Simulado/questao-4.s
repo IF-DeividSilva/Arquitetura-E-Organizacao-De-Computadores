@@ -24,10 +24,12 @@ v3: .word 0, 0, 0, 0, 0, 0
         lw $t5, 0($t1)            # Carrega o valor de v2[i] em $t5
         add $t6, $t4, $t5         # Soma v1[i] e v2[i], resultado em $t6
         sw $t6, 0($t2)            # Armazena o resultado em v3[i]
+        
         addi $t0, $t0, 4          # Incrementa o endereço de v1
         addi $t1, $t1, 4          # Incrementa o endereço de v2
         addi $t2, $t2, 4          # Incrementa o endereço de v3
         addi $t3, $t3, -1          # Decrementa o contador
+        
         j loop                    # Volta para o início do loop
 
     end_loop:
@@ -36,11 +38,14 @@ v3: .word 0, 0, 0, 0, 0, 0
 
     print_loop:
         beq $t3, $zero, end_print  # Se $t3 for zero, termina o loop de impressão
+        
         lw $a0, 0($t2)             # Carrega o valor de v3[i] em $a0
         li $v0, 1                  # Código de serviço para imprimir inteiro
         syscall                    # Chama o serviço do sistema
+        
         addi $t2, $t2, 4           # Incrementa o endereço de v3
         addi $t3, $t3, -1           # Decrementa o contador
+        
         j print_loop               # Volta para o início do loop de impressão
 
     end_print:
