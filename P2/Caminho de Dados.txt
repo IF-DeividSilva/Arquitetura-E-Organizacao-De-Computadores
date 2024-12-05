@@ -1,0 +1,59 @@
+A abordagem multiciclo -> nem todas as instruções executam na mesma quantidade de ciclos, são otimizadas, pois são varios ciclos pequenos
+eh mais complexo, pode ocorrer dependencia de dados, precisa implementar pipiline.
+
+A abordagem monociclo -> ciclo eh muito grande e limitado pela instrução de maior tempo. 
+
+sigh extend -> exetende um imediato para ter 32bits e sao completados com 0 ou 1 sendo 0 positivos e negativos 1 para a ula consiguir 
+fazer as operações.
+
+add type R
+
+Banco de registradores -> ula -> 
+
+type imediat
+
+Etapa de busca -> banco de registrador , sigh extende -> ula -> 
+
+
+--------------------------------------------------------------------------------------------------------------------------
+++++ EXERCICIOS +++
+
+Sobre o método de clock monociclo, selecione apenas as alternativas corretas: 
+
+O método é prejudicado com um conjunto de instruções,  ao qual  as etapas de execução, varia entre as mesmas.
+
+O ciclo de clock é grande o suficiente para agregar todas as etapas de execução de qualquer instrução da CPU.
+-------------------------------------------------------------------------------------------------------------------
+Quais são as principais desvantagens do método clock monociclo em relação a abordagem mult ciclo?
+
+ciclo é muito grande e limitado pela instrução de maior tempo, o que faz com que seja menos otimizado, caso tenha instruções que executem em tempos de clock diferentes.
+vantagem-> simplicidade na implementação
+
+
+--------------------------------------------------------------------------------------------------------------------
+Cite exemplos de instruções que utilizam a unidade extensora de sinais, considerando o processador MIPS do mips, e justifique essa utilização pelas instruções.
+
+Instruções com o imediato (addi), pois o processador trabalha somente em 32 bits, então é necessário estender o imediato completando-o com 0 ou 1 (dependendo do sinal), para que tenha 32 bits.
+----------------------------------------------------------------------------------------------------------------------
+
+Qual instrução da ULA as instruções LW e SW utilizam? Por que?
+
+add, para somar o valor do registrador com o offset para obter o endereço de memoria que ser quer
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+De acordo com o diagrama do datapath do mips, indique  quais unidades ficam ativas na execução das instruções. Indique as unidades ativas em cada etapa de execução de cada trecho de código.
+
+   a) lw    $t1, 20($s1)
+
+    b) sub  $t2, $s2, $s3
+
+    c) add  $t3, $s3, $s4
+
+    d) add  $t5, $s5, $s6
+
+a) pc,   instruction mem, banco de registradores , ula , extensor de sinal, data mem
+b)  pc,   instruction mem, banco de registradores , ula, wb
+c)   pc,   instruction mem, banco de registradores , ula, wb
+d)  pc,   instruction mem, banco de registradores , ula, wb
