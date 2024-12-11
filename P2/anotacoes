@@ -1,0 +1,12 @@
+-> Representar numeros negativos
+
+localiza o 1 mais a direita e mantem ele e inverte os outros 
+
+overflow
+- não tem a quantidade de bits para representar o numero (num muito grande)
+
+-> deslocamento logico
+- Ao deslocar entra um zero 
+
+-> deslocamento aritimetico 
+- Ao deslocar entra a repetição do ultimo bit na hora de deslocar
