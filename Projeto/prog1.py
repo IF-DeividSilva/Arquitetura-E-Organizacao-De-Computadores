@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import scrolledtext, filedialog
+import time
 
 class MIPSsimulator:
     def __init__(self):
@@ -46,7 +47,9 @@ class MIPSsimulator:
         self.passo_a_passo_button = tk.Button(self.root, text="Executar Passo a Passo", command=self.executar_passo_a_passo)
         self.passo_a_passo_button.pack()
 
-        self.passo_a_passo_button.pack() 
+        self.proximo_passo_button = tk.Button(self.root, text="Próximo Passo", command=self.continuar_execucao)
+        self.proximo_passo_button.pack()
+
         self.limpar_button = tk.Button(self.root, text="Limpar Interface", command=self.limpar_interface) 
         self.limpar_button.pack()
         
@@ -110,6 +113,12 @@ class MIPSsimulator:
             # pega o valor imediato
             imediato = int(operandos[4])
             self.registradores[rt] = self.registradores[rs] + imediato
+
+            rt = self.converter_bin(rt)
+            rs = self.converter_bin(rs)
+            imediato = bin(imediato)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            self.bin = self.bin + rs + rt + imediato
 
         
         elif opcode == 'add':  # adicionar
@@ -235,6 +244,16 @@ class MIPSsimulator:
             imediato = int(operandos[4])
             self.registradores[rd] = self.registradores[rt] << imediato
             
+            rd = self.converter_bin(rd)
+            rt = self.converter_bin(rt)
+            imediato = bin(imediato)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+
+            imediato = bin(imediato)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            self.bin = self.bin + rs + rt + imediato
+
+            
         #---------------------------------------------------------------------------------- 
         # Condicionais
 
@@ -265,37 +284,74 @@ class MIPSsimulator:
         elif opcode == 'slti': # menor que com imediato
             self.bin = "001010"
 
-            rd = operandos[0]
+            rt = operandos[0]
             rs = operandos[2]
             imediato = int(operandos[4])
             self.registradores[rd] = 1 if self.registradores[rs] < imediato else 0
+
+            rt = self.converter_bin(rd)
+            rs = self.converter_bin(rs)
+            imediato = bin(imediato)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            self.bin = self.bin + rs + rt + imediato
+
         #----------------------------------------------------------------------------------
         # Load Store
 
         #----------------------------------------------------------------------------------
         elif opcode == 'lw':  # carregar word
             self.bin = "100011"
+            
+            rt = operandos[0]  # destino
+            imediato, rs = operandos[2].split('(')
+            rs = rs[:-1]  # removendo o parênteses de fechamento
 
-            rt = operandos[0]
-            imediato = int(operandos[2])
+            imediato = int(imediato)
             self.registradores[rt] = self.memoria[self.registradores[rs] + imediato]
-        
+
+            rt = self.converter_bin(rt)  # destino
+            rs = self.converter_bin(rs)  # origem
+            imediato = bin(imediato)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            self.bin = self.bin + rs + rt + imediato
+
+
+
         elif opcode =='sw':  # salvar word
             self.bin = "101011"
 
             rt = operandos[0]
-            imediato = int(operandos[2])
+            imediato, rs = operandos[2].split('(')
+            rs = rs[:-1]  # removendo o parênteses de fechamento
+            imediato = int(imediato)
             self.memoria[self.registradores[rs] + imediato] = self.registradores[rt]
-        
+            
+
+            rt = self.converter_bin(rt) # destino
+            rs = self.converter_bin(rs) # origem
+
+            imediato = bin(imediato)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            self.bin = self.bin + rs + rt + imediato
+
+
         elif opcode == 'lui':  # carregar imediato
             self.bin = "001111"
 
             rt = operandos[0]
+            rs = "00000"
             imediato = int(operandos[2])
-            self.registradores[rt] = imediato << imediato
+            self.registradores[rt] = imediato << 16
+
+            rt = self.converter_bin(rt)
+
+            imediato = bin(imediato << 16)[2:]
+            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            self.bin = self.bin + rs + rt + imediato
 
         #----------------------------------------------------------------------------------
         # Syscalls (Imprimir inteiro)
+        # não tem nas instruções do mips por isso o binario esta torto
         elif opcode == 'li':  # carregar imediato
 
             rt = operandos[0]
@@ -303,7 +359,11 @@ class MIPSsimulator:
             self.registradores[rt] = imediato
         
         elif opcode == 'syscall':
+            # Não sei se é isso
+            # ou somente o opcode + funct maybe 
             self.bin = "000000"
+            funct = "001100"
+            self.bin = self.bin + self.aux_r + self.aux_r + self.aux_r + self.aux_r + funct
 
             auxV0 = self.registradores['$v0']
             if auxV0 == 1:
@@ -338,11 +398,18 @@ class MIPSsimulator:
             self.atualizar_interface()
     
     def executar_passo_a_passo(self):
-        if self.instrucao_atual < len(self.instrucoes): 
-            instrucao = self.instrucoes[self.instrucao_atual]
+        for instrucao in self.instrucoes:
             self.executar_instrucao(instrucao)
             self.atualizar_interface()
-            self.instrucao_atual += 1
+            self.executando = False # Pausa a execução
+            # epera o usuario clicar no botão de passo a passo
+            while not self.executando:
+                self.root.update()
+                time.sleep(0.5)
+            
+            
+    def continuar_execucao(self):
+        self.executando = True
 
     def atualizar_interface(self):
         self.registradores_texto.delete(1.0, tk.END)
