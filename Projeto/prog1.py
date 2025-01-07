@@ -119,7 +119,22 @@ class MIPSsimulator:
             rs = operandos[2]
             rt = operandos[4]
             self.registradores[rd] = self.registradores[rs] + self.registradores[rt]
-        
+
+            # converter para string para juntar no R format
+            # pega o aux rd (00000) tira o tam (tira os zeros a direita) de rd e soma com rd
+            # para deixar sempre com tamanho 5 conforme as especificaoes
+            rd = self.converter_bin(rd)
+            rs = self.converter_bin(rs)
+            rt = self.converter_bin(rt)
+            
+            rd = (self.aux_r[:-len(str(rd))] + str(rd))
+            rs = (self.aux_r[:-len(str(rs))] + str(rs))
+            rt = (self.aux_r[:-len(str(rt))] + str(rt))
+            funct = "100000" # 32
+            
+            funct =(self.aux_funct[:-len(str(funct))] + str(funct))
+            self.bin = self.bin+ rs + rt + rd + self.shamt + funct
+                        
         elif opcode == 'sub':  # subtrair
             self.bin = "000000"
 
@@ -150,6 +165,21 @@ class MIPSsimulator:
             rs = operandos[2]
             rt = operandos[4]
             self.registradores[rd] = self.registradores[rs] * self.registradores[rt]
+
+            # converter para string para juntar no R format
+            # pega o aux rd (00000) tira o tam (tira os zeros a direita) de rd e soma com rd
+            # para deixar sempre com tamanho 5 conforme as especificaoes
+            rd = self.converter_bin(rd)
+            rs = self.converter_bin(rs)
+            rt = self.converter_bin(rt)
+
+            rd = (self.aux_r[:-len(str(rd))] + str(rd))
+            rs = (self.aux_r[:-len(str(rs))] + str(rs))
+            rt = (self.aux_r[:-len(str(rt))] + str(rt))
+            funct # não sei o valor
+            funct =(self.aux_funct[:-len(str(funct))] + str(funct))
+
+            self.bin = self.bin+ rs + rt + rd + self.shamt + funct
         
         elif opcode == 'and':  # e
             self.bin = "000000"
@@ -158,7 +188,22 @@ class MIPSsimulator:
             rs = operandos[2]
             rt = operandos[4]
             self.registradores[rd] = self.registradores[rs] & self.registradores[rt]
-        
+            
+            # converter para string para juntar no R format
+            # pega o aux rd (00000) tira o tam (tira os zeros a direita) de rd e soma com rd
+            # para deixar sempre com tamanho 5 conforme as especificaoes
+            rd = self.converter_bin(rd)
+            rs = self.converter_bin(rs)
+            rt = self.converter_bin(rt)
+
+            rd = (self.aux_r[:-len(str(rd))] + str(rd))
+            rs = (self.aux_r[:-len(str(rs))] + str(rs))
+            rt = (self.aux_r[:-len(str(rt))] + str(rt))
+            funct = "100100" # 36
+            funct =(self.aux_funct[:-len(str(funct))] + str(funct))
+            
+            self.bin = self.bin+ rs + rt + rd + self.shamt + funct
+
         elif opcode == 'or':  # ou
             self.bin = "000000"
             
@@ -166,7 +211,22 @@ class MIPSsimulator:
             rs = operandos[2]
             rt = operandos[4]
             self.registradores[rd] = self.registradores[rs] | self.registradores[rt]
-        
+
+            # converter para string para juntar no R format
+            # pega o aux rd (00000) tira o tam (tira os zeros a direita) de rd e soma com rd
+            # para deixar sempre com tamanho 5 conforme as especificaoes
+            rd = self.converter_bin(rd)
+            rs = self.converter_bin(rs)
+            rt = self.converter_bin(rt)
+
+            rd = (self.aux_r[:-len(str(rd))] + str(rd))
+            rs = (self.aux_r[:-len(str(rs))] + str(rs))
+            rt = (self.aux_r[:-len(str(rt))] + str(rt))
+            funct = "100101" # 37
+            funct =(self.aux_funct[:-len(str(funct))] + str(funct))
+            
+            self.bin = self.bin+ rs + rt + rd + self.shamt + funct
+
         elif opcode == 'sll':  # deslocar para a esquerda
             self.bin = "000000"
 
@@ -174,7 +234,7 @@ class MIPSsimulator:
             rt = operandos[2]
             imediato = int(operandos[4])
             self.registradores[rd] = self.registradores[rt] << imediato
-        
+            
         #---------------------------------------------------------------------------------- 
         # Condicionais
 
@@ -186,7 +246,22 @@ class MIPSsimulator:
             rs = operandos[2]
             rt = operandos[4]
             self.registradores[rd] = 1 if self.registradores[rs] < self.registradores[rt] else 0
-        
+
+            # converter para string para juntar no R format
+            # pega o aux rd (00000) tira o tam (tira os zeros a direita) de rd e soma com rd
+            # para deixar sempre com tamanho 5 conforme as especificaoes
+            rd = self.converter_bin(rd)
+            rs = self.converter_bin(rs)
+            rt = self.converter_bin(rt)
+
+            rd = (self.aux_r[:-len(str(rd))] + str(rd))
+            rs = (self.aux_r[:-len(str(rs))] + str(rs))
+            rt = (self.aux_r[:-len(str(rt))] + str(rt))
+            funct = "101010" # 42
+            funct =(self.aux_funct[:-len(str(funct))] + str(funct))
+
+            self.bin = self.bin+ rs + rt + rd + self.shamt + funct
+            
         elif opcode == 'slti': # menor que com imediato
             self.bin = "001010"
 
