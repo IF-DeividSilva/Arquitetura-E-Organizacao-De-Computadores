@@ -1,3 +1,4 @@
-li $v0, 1            # printar o valor 
-addi $a0, $a0, 10
-syscall
+addi $t0, $zero, 1
+addi $t1, $zero, 0
+
+sll $s1, $t0, 10

@@ -28,15 +28,32 @@ class MIPSsimulator:
         self.controle = 0
         
         # Interface gráfica
-        self.text_area = scrolledtext.ScrolledText(self.root, wrap=tk.WORD, width=100, height=20)
-        self.text_area.pack(padx=10, pady=10)
+        self.meu_label = tk.Label(self.root, text="Código em Assembly", font=("Arial", 12), fg="black")
+        self.meu_label.pack(padx=0, pady=0)
+        self.text_area = scrolledtext.ScrolledText(self.root, wrap=tk.WORD, width=50, height=15)
+        self.text_area.pack (padx=0, pady=(0 , 10))
         
+        self.meu_label2 = tk.Label(self.root, text="Instruções", font=("Arial", 12), fg="black")
+        self.meu_label2.pack(padx=0, pady=0)
         self.instrucao_texto = scrolledtext.ScrolledText(self.root, wrap=tk.WORD, width=100, height=5)
-        self.instrucao_texto.pack(padx=10, pady=10)
+        self.instrucao_texto.pack(padx=1, pady=1)
         
-        self.registradores_texto = scrolledtext.ScrolledText(self.root, wrap=tk.WORD, width=50, height=15)
-        self.registradores_texto.pack(padx=10, pady=10)
-        
+        # Criar um Frame para os ScrolledTexts
+        frame_scrolledtexts = tk.Frame(self.root)
+        frame_scrolledtexts.pack(pady=10, padx=10)
+
+        self.meu_label3 = tk.Label(frame_scrolledtexts, text="Registradores", font=("Arial", 12), fg="black")
+        self.meu_label3.grid(row=0, column=0, padx=10, pady=10)
+
+        self.registradores_texto = scrolledtext.ScrolledText(frame_scrolledtexts, wrap=tk.WORD, width=50, height=15)
+        self.registradores_texto.grid(row=1, column=0, padx=10, pady=10)
+
+        self.meu_label4 = tk.Label(frame_scrolledtexts, text="Terminal", font=("Arial", 12), fg="black")
+        self.meu_label4.grid(row=0, column=1, padx=10, pady=10)
+
+        self.terminal = scrolledtext.ScrolledText(frame_scrolledtexts, wrap=tk.WORD, width=50, height=15)
+        self.terminal.grid(row=1, column=1, padx=10, pady=10)
+
         # Botões
         self.abrir_button = tk.Button(self.root, text="Abrir Arquivo", command=self.abrir_arquivo)
         self.abrir_button.pack()
@@ -168,13 +185,15 @@ class MIPSsimulator:
             self.bin = self.bin+ rs + rt + rd + self.shamt + funct
         
         elif opcode == 'mul':  # multiplicar
+            # Confirmar
+            # OPCODE - 28
+            # FUNCT - 2
             self.bin = "000000"
 
             rd = operandos[0]
             rs = operandos[2]
             rt = operandos[4]
             self.registradores[rd] = self.registradores[rs] * self.registradores[rt]
-
             # converter para string para juntar no R format
             # pega o aux rd (00000) tira o tam (tira os zeros a direita) de rd e soma com rd
             # para deixar sempre com tamanho 5 conforme as especificaoes
@@ -185,7 +204,9 @@ class MIPSsimulator:
             rd = (self.aux_r[:-len(str(rd))] + str(rd))
             rs = (self.aux_r[:-len(str(rs))] + str(rs))
             rt = (self.aux_r[:-len(str(rt))] + str(rt))
-            funct # não sei o valor
+
+            funct = "011000"  # não sei o valor(PERGUNTAR DEPOIS)
+
             funct =(self.aux_funct[:-len(str(funct))] + str(funct))
 
             self.bin = self.bin+ rs + rt + rd + self.shamt + funct
@@ -248,9 +269,9 @@ class MIPSsimulator:
             rt = self.converter_bin(rt)
             imediato = bin(imediato)[2:]
             imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
-
-            imediato = bin(imediato)[2:]
-            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
+            
+            #imediato = bin(imediato)[2:]
+            #imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
             self.bin = self.bin + rs + rt + imediato
 
             
@@ -367,7 +388,7 @@ class MIPSsimulator:
 
             auxV0 = self.registradores['$v0']
             if auxV0 == 1:
-                print(self.registradores['$a0'])
+                self.atualizar_terminal()
             elif auxV0 == 4:
                 print(self.memoria[self.registradores['$v0']])
                 self.registradores['$v0'] = self.memoria[self.registradores['$v0']]
@@ -410,6 +431,9 @@ class MIPSsimulator:
             
     def continuar_execucao(self):
         self.executando = True
+
+    def atualizar_terminal(self):
+        self.terminal.insert(tk.END, f"{self.registradores['$a0']}\n")
 
     def atualizar_interface(self):
         self.registradores_texto.delete(1.0, tk.END)
