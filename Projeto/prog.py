@@ -417,6 +417,7 @@ class MIPSsimulator:
     
     def executar_programa(self):
         for instrucao in self.instrucoes:
+             #####   Tirar comentario 
             self.executar_instrucao(instrucao)
             self.atualizar_interface()
     
