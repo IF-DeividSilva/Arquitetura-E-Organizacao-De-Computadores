@@ -1,6 +1,6 @@
 -> Representar numeros negativos
 
-localiza o 1 mais a direita e mantem ele e inverte os outros 
+Localizar o 1 mais a direita e manter ele e inverter os outros numeros que estão na esquerda dele. 
 
 overflow
 - não tem a quantidade de bits para representar o numero (num muito grande)
