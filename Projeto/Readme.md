@@ -20,8 +20,8 @@ python prog1.py
 ### Ao clicar no botão "abrir arquivo" será aberta outra janela para ser escolhido o arquivo em assembly que será executado:
 ![img](https://github.com/IF-DeividSilva/Arquitetura-E-Organizacao-De-Computadores/blob/main/Projeto/image.png)
 
-### O codigo aparecerá no campo "Código Assembly" e a execução poderá ser Instantânea:
+### O codigo aparecerá no campo "Código em Assembly" e a execução poderá ser Instantânea:
 ![img](https://github.com/IF-DeividSilva/Arquitetura-E-Organizacao-De-Computadores/blob/main/Projeto/image3.png)
 
 ### Ou "passo a passo"  (Clicar em passo a passo e posteriomente em próximo passo):
-![img](https://github.com/IF-DeividSilva/Arquitetura-E-Organizacao-De-Computadores/blob/main/Projeto/imag4.png)
+![img](https://github.com/IF-DeividSilva/Arquitetura-E-Organizacao-De-Computadores/blob/main/Projeto/image4.png)
