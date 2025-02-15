@@ -15,6 +15,5 @@ python prog1.py
 ```
 
 ### Após executar será aberta uma janela como mostra a imagem a baixo:
-```bash
 ![img](https://github.com/IF-DeividSilva/Fundamentos-JS/blob/main/Aulas/Aula_10/node/image.png)
-```
+
