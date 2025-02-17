@@ -1,3 +1,4 @@
+# Alunos : Vitor Hugo Leite Arruda de Oliveira e Deivid da Silva Galvão
 import tkinter as tk
 from tkinter import scrolledtext, filedialog, messagebox
 import time
@@ -295,12 +296,10 @@ class MIPSsimulator:
             
             rd = self.converter_bin(rd)
             rt = self.converter_bin(rt)
-            imediato = bin(imediato)[2:]
-            imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
 
             imediato = bin(imediato)[2:]
             imediato = (self.aux_imediato[:-len(str(imediato))] + str(imediato))
-            self.bin = self.bin + rs + rt + imediato
+            self.bin = self.bin + rd + rt + imediato
 
             
         #---------------------------------------------------------------------------------- 
@@ -429,11 +428,11 @@ class MIPSsimulator:
                 caracteristica = self.busca_label_tamanho(self.registradores['$a0'])
                 if caracteristica[0] == ".asciiz":
                     comeco = self.registradores['$a0']
-                    final = comeco + caracteristica[1] - 1
+                    final = comeco + caracteristica[1]
                     conteudo = "".join(self.data_segment[comeco:final])
                 else:
-                    comeco = self.registradores['$a0']
-                    conteudo = self.data_segment[comeco]
+                    raise MinhaExcecao("Tentando imprimir inteiro com código de chamada de sistema 4.", self.linha_atual)
+
 
                 self.atualizar_terminal(conteudo)
                 
@@ -560,6 +559,7 @@ class MIPSsimulator:
             # Finaliza a execução
             if self.passou_no_syscall_10 == 0:
                  raise MinhaExcecao("Não encerrou o programa com syscall e $v0 = 10!", self.auxlinha_atual)
+
 
                       
     def continuar_execucao(self):
